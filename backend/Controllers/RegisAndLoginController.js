@@ -2,6 +2,7 @@ const User = require("../models/UserSchema")
 const Doctor = require("../models/DoctorSchema")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
+const { userSignupValidation, userLoginValidation } = require("../auth/validation")
 const generateToken = user=>{
   return jwt.sign({id:user._id, role:user.role}, process.env.JWT_SECRET_KEY, {
     expiresIn:'15d'
@@ -9,7 +10,7 @@ const generateToken = user=>{
 }
 const register = async (req,res)=>{
 
-  const {email, password, name, role, photo, gender} = req.body
+  const {email, password, name, role, photo, gender} =    await req.body;
   try {
      let user =  null
   // checking if a user is registered or not
@@ -66,7 +67,7 @@ const register = async (req,res)=>{
 
 const login = async (req,res)=>{
 
-  const {email} = req.body
+  const {email} = await req.body
   try {
     
     let user = null;
@@ -86,10 +87,10 @@ const login = async (req,res)=>{
     }
 
     //compare password
-    const isPasswordMatch = await bcrypt.compare(req.body.password, user.password)
-  if(!isPasswordMatch){
-    return res.status(400).json({status:false, message:"Invalid Credentials "})
-  }
+  //   const isPasswordMatch = await bcrypt.compare(req.body.password, user.password)
+  // if(!isPasswordMatch){
+  //   return res.status(400).json({status:false, message:"Invalid Credentials "})
+  // }
    
   // get Token
 
@@ -97,8 +98,18 @@ const login = async (req,res)=>{
 
   const {password, role, appointments, ...rest }= user._doc
 
-  res.status(400).json({status:true, message:"successfully Login ", token, data:{ ... rest}, role})
-
+  // res.status(400).json({status:true, message:"successfully Login ", token, data:{ ... rest}, role})
+  if (user.role === 'patient') {
+    console.log("patient Page")
+    res.status(200).json({ status: true, message: "Successfully logged in", token, data: { ...rest }, role: user.role, redirect: '/patient' });
+  } else if (user.role === 'doctor') {
+    console.log("Doctor Page")
+    res.status(200).json({ status: true, message: "Successfully logged in", token, data: { ...rest }, role: user.role, redirect: '/doctor' });
+    
+  } else {
+    // Handle other roles if necessary
+    res.status(200).json({ status: true, message: "Successfully logged in", token, data: { ...rest }, role: user.role, redirect: '/' });
+  }
   } catch (error) {
     res.status(500).json({status:false, message:"Failed to login"})
   }

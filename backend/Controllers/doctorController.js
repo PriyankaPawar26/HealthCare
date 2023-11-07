@@ -10,11 +10,11 @@ const updateDoctor = async (req, res) => {
     ).select("-password");
     res.status(200).json({
       success: true,
-      message: "successfully Updated",
+      message: "Successfully Updated",
       data: updatedDoctor,
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: "failed to update" });
+    res.status(500).json({ success: false, message: "Failed to update" });
   }
 };
 
@@ -24,17 +24,17 @@ const deleteDoctor = async (req, res) => {
     await Doctor.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
-      message: "successfully Delete",
+      message: "Successfully Deleted",
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: "failed to Delete" });
+    res.status(500).json({ success: false, message: "Failed to Delete" });
   }
 };
 
 const getSingleDoctor = async (req, res) => {
   const id = req.params.id;
   try {
-    const doctor = await Doctor.findById(id).select("-password");
+    const doctor = await Doctor.findById(id).populate("reviews").select("-password");
     if (doctor) {
       res.status(200).json({
         success: true,
@@ -50,9 +50,7 @@ const getSingleDoctor = async (req, res) => {
 };
 
 const getAllDoctor = async (req, res) => {
-  // const id = req.params.id;
   try {
-    // for searching a doctor from search bar
     const { query } = req.query;
     let doctors;
     if (query) {
@@ -64,16 +62,9 @@ const getAllDoctor = async (req, res) => {
         ],
       }).select("-password");
     } else {
-       doctors = await Doctor.find({ isApproved: "approved"}).select("-password");
+      doctors = await Doctor.find({ isApproved: "approved" }).select("-password");
     }
-
-    // for searching a doctor from search bar end
-
-    res
-      .status(200)
-      .json({ success: true, message: "Doctors Found", data: doctors });
-
-    res.status(404).json({ success: false, message: "Not Found" });
+    res.status(200).json({ success: true, message: "Doctors Found", data: doctors });
   } catch (err) {
     res.status(404).json({ success: false, message: "Not Found" });
   }
