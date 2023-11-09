@@ -1,0 +1,7 @@
+ 1. {1 problem in login.jsx frontend file
+if (!res.ok) {
+//   console.log("wrong");
+//   throw new Error(result.message);
+// }}
+
+

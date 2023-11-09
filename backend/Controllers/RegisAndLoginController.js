@@ -98,18 +98,22 @@ const login = async (req,res)=>{
 
   const {password, role, appointments, ...rest }= user._doc
 
-  // res.status(400).json({status:true, message:"successfully Login ", token, data:{ ... rest}, role})
-  if (user.role === 'patient') {
-    console.log("patient Page")
-    res.status(200).json({ status: true, message: "Successfully logged in", token, data: { ...rest }, role: user.role, redirect: '/patient' });
-  } else if (user.role === 'doctor') {
-    console.log("Doctor Page")
-    res.status(200).json({ status: true, message: "Successfully logged in", token, data: { ...rest }, role: user.role, redirect: '/doctor' });
+  res.status(400).json({status:true, message:"successfully Login ", token, data:{ ... rest}, role})
+
+
+  // if (user.role === 'patient') {
+  //   console.log("patient Page")
+  //   res.status(200).json({ status: true, message: "Successfully logged in", token, data: { ...rest }, role: user.role, redirect: '/patient' });
+  // } else if (user.role === 'doctor') {
+  //   console.log("Doctor Page")
+  //   res.status(200).json({ status: true, message: "Successfully logged in", token, data: { ...rest }, role: user.role, redirect: '/doctor' });
     
-  } else {
-    // Handle other roles if necessary
-    res.status(200).json({ status: true, message: "Successfully logged in", token, data: { ...rest }, role: user.role, redirect: '/' });
-  }
+  // } else {
+  //   // Handle other roles if necessary
+  //   res.status(200).json({ status: true, message: "Successfully logged in", token, data: { ...rest }, role: user.role, redirect: '/' });
+  // }
+
+
   } catch (error) {
     res.status(500).json({status:false, message:"Failed to login"})
   }
