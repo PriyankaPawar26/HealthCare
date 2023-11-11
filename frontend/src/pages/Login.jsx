@@ -32,10 +32,10 @@ const Login = () => {
       console.log(res);
       const result = await res.json();
       // =============== We'll Solve it ===========
-      // if (!res.ok) {
-      //   console.log("wrong");
-      //   throw new Error(result.message);
-      // }
+      if (!res.ok) {
+        console.log("wrong");
+        throw new Error(result.message);
+      }
 
       dispatch({
         type: "LOGIN_SUCCESS",
