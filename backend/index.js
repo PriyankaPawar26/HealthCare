@@ -1,4 +1,3 @@
-
 const express = require("express")
 const db = require("./config/dbConnection")
 const cors = require("cors")
@@ -13,16 +12,13 @@ dotenv.config()
 const app= express()
 const port = process.env.PORT || 8000
 
-const corsOptions ={
-    origin:true
-}
-
-
+// const corsOptions ={
+//     origin:true
+// }
 // middleware
-
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.use('/api/v1/auth', RegisterAndLoginRoute)
 app.use('/api/v1/users', userRouter)

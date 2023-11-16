@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs")
 const { userSignupValidation, userLoginValidation } = require("../auth/validation")
 const generateToken = user=>{
   return jwt.sign({id:user._id, role:user.role}, process.env.JWT_SECRET_KEY, {
-    expiresIn:'15d'
+    expiresIn:'1d'
   })
 }
 const register = async (req,res)=>{
@@ -93,7 +93,7 @@ const login = async (req,res)=>{
   // }
    
   // get Token
-
+   
   const token = generateToken(user)
 
   const {password, role, appointments, ...rest }= user._doc
