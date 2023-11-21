@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs")
 const { userSignupValidation, userLoginValidation } = require("../auth/validation")
 const generateToken = user=>{
   return jwt.sign({id:user._id, role:user.role}, process.env.JWT_SECRET_KEY, {
-    expiresIn:'1d'
+    expiresIn:'2d'
   })
 }
 const register = async (req,res)=>{
