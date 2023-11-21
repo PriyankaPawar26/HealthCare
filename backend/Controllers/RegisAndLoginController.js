@@ -98,7 +98,7 @@ const login = async (req,res)=>{
 
   const {password, role, appointments, ...rest }= user._doc
 
-  res.status(400).json({status:true, message:"successfully Login ", token, data:{ ... rest}, role})
+  res.status(200).json({status:true, message:"successfully Login ", token, data:{ ... rest}, role})
 
 
   // if (user.role === 'patient') {

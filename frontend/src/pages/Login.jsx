@@ -22,7 +22,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/v1/auth/login", {
+      const res = await fetch("http://localhost:2000/api/v1/auth/login", {
         method: "post",
         headers: {
           "Content-Type": "application/json",
