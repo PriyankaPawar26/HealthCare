@@ -20,7 +20,6 @@ const authenticate = async (req, res, next) => {
 
     // verify Token
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    console.log(decoded)
     req.userId = decoded.id;
     req.role = decoded.role;
     next(); // must call the next function
@@ -46,7 +45,7 @@ const restrict = (roles) => async (req, res, next) => {
     return res.status(406).json({success:false, message:"User not found"})
   }
 
-      console.log(roles, user.role)
+      // console.log(roles, user.role)
       if(!roles.includes(user.role)){
    return res.status(401).json({success:false, message:"You are not Authorized"})
       }

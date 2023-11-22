@@ -16,7 +16,7 @@ const useFetchData = (url) => {
                 })
     
                 const result = await res.json()
-    
+               
                 if(!res.ok){
                    throw new Error(result.message + '😪')
                 }

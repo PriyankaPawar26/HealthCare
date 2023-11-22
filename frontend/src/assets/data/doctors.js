@@ -21,7 +21,7 @@ export const doctors = [
     totalRating: 272,
     photo: doctorImg02,
     totalPatients: 1500,
-    hospital: "Mount Adora Hospital, Sylhet.",
+    hospital: "Aurobindo.",
   },
   {
     id: "03",

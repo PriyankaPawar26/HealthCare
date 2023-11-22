@@ -54,6 +54,7 @@ const getSingleDoctor = async (req, res) => {
 
 const getAllDoctor = async (req, res) => {
   try {
+    const searchTerm = req.query.searchTerm || '';
     const { query } = req.query;
     let doctors;
     if (query) {
@@ -63,15 +64,19 @@ const getAllDoctor = async (req, res) => {
           { name: { $regex: query, $options: "i" } },
           { specialization: { $regex: query, $options: "i" } },
         ],
+        name: { $regex: new RegExp(searchTerm, 'i') }
       }).select("-password");
     } else {
       doctors = await Doctor.find({ isApproved: "approved" }).select(
         "-password"
       );
     }
+    res.json({ doctors });
     res
       .status(200)
       .json({ success: true, message: "Doctors Found", data: doctors });
+
+ 
   } catch (err) {
     res.status(404).json({ success: false, message: "Not Found" });
   }
@@ -95,5 +100,7 @@ const getDoctorProfile = async (req, res) => {
     res.status(500).json({success:false, message:"Something went Wrong, cannot get"})
   }
 };
+
+
 
 module.exports = { updateDoctor, deleteDoctor, getSingleDoctor, getAllDoctor, getDoctorProfile };
