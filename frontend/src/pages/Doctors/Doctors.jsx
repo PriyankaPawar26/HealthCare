@@ -42,14 +42,51 @@
 // export default Doctors
 
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Testimonial from '../../components/Testimonial/Testimonial';
 import { doctors } from './../../assets/data/doctors';
 import DoctorCard from './../../components/Doctors/DoctorCard';
+import { BASE_URL } from '../../config';
 
 const Doctors = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredDoctors, setFilteredDoctors] = useState(doctors);
+
+  const [doctorData, setDoctorData] = useState(null);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/doctors`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const {data} = await response.json();
+        setDoctorData(data);
+      } catch (error) {
+        console.error(error);
+        // Handle error (show a message, etc.)
+      }
+    };
+
+    fetchData();
+  }, []);
+  console.log(doctorData, 'doctor data')
+  
+  if (!doctorData) {
+    return <div>Loading...</div>; // Or a loading spinner or message
+  }
+
+  // const {
+  //   name,
+  //   avgRating,
+  //   totalRating,
+  //   photo,
+  //   specialization,
+  //   totalPatients,
+  //   hospital,
+  // } = doctorData;
+  // console.log(doctorData)
 
   const handleSearch = (event) => {
     const searchValue = event.target.value.toLowerCase();
@@ -84,9 +121,13 @@ const Doctors = () => {
       <section>
         <div className='container'>
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
-            {filteredDoctors.map((doctor) => (
-              <DoctorCard key={doctor.id} doctor={doctor} />
+            {doctorData.map((doctor)=>(
+              <DoctorCard key={doctor._id} doctor={doctor} />
+
             ))}
+            {/* {filteredDoctors.map((doctor) => (
+              <DoctorCard key={doctor.id} doctor={doctor} />
+            ))} */}
           </div>
         </div>
       </section>

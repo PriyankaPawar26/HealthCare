@@ -10,7 +10,8 @@ const generateToken = user=>{
 }
 const register = async (req,res)=>{
 
-  const {email, password, name, role, photo, gender} =    await req.body;
+  const {email, password, name, role, photo, gender,  specialization,
+    experiences, avgRating, totalPatients,   hospital,} =    await req.body;
   try {
      let user =  null
   // checking if a user is registered or not
@@ -50,7 +51,12 @@ const register = async (req,res)=>{
         password:hashPassword,
         photo,
         gender,
-        role
+        role,
+        specialization,
+        experiences,
+        avgRating,
+        totalPatients,  
+        hospital,
       })
      }
 

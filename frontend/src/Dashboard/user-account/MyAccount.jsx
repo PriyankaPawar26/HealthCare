@@ -9,6 +9,7 @@ import Loading from "../../components/Loader/Loading";
 import Error from "../../components/Error/Error";
 
 const MyAccount = () => {
+  
   const { dispatch } = useContext(authContext);
   const [tab, setTab] = useState("bookings");
   const {

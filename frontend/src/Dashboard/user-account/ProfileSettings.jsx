@@ -5,78 +5,74 @@ import uploadImageToCloudinary from "../../utils/uploadCloudinary";
 import { BASE_URL, token } from "../../config";
 
 import HashLoader from "react-spinners/HashLoader";
-const ProfileSettings = ({user}) => {
- 
-    const [selectedFile, setSelectedFile] = useState(null);
+const ProfileSettings = ({ user }) => {
+  const [selectedFile, setSelectedFile] = useState(null);
 
-    const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
-      name: "",
-      email: "",
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    password: "",
+    photo: user?.photo || null,
+    gender: user?.gender || "",
+    bloodType: user?.bloodType || "",
+  });
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    setFormData({
+      name: user?.name || "",
+      email: user?.email || "",
       password: "",
-      photo: null,
-      gender: "",
-      bloodType:""
+      photo: user?.photo || null,
+      gender: user?.gender || "",
+      bloodType: user?.bloodType || "",
     });
+  }, [user]);
 
-    const navigate = useNavigate();
-    useEffect(()=>{
-      setFormData({name: user.name, email: user.email, photo:user.photo, gender:user.gender, bloodType : user.bloodType })
-    },[user])
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    const handleInputChange = (e) => {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
 
-    // const handleInputChange = (e) => {
-    //   const { name, value } = e.target;
-    //   setFormData(prevState => {
-    //     const updatedState = { ...prevState, [name]: value };
-    //     // console.log(updatedState); // Check the updated state in the console
-    //     return updatedState;
-    //   });
-    // };
+  const handleFileInputChange = async (event) => {
+    const file = event.target.files[0];
+    const data = await uploadImageToCloudinary(file);
 
-    const handleFileInputChange = async (event) => {
-      const file = event.target.files[0];
-      const data = await uploadImageToCloudinary(file);
+    setSelectedFile(data.url);
+    setFormData({ ...formData, photo: data.url });
+  };
 
-     
-      setSelectedFile(data.url);
-      setFormData({ ...formData, photo: data.url });
-    };
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    setLoading(true);
 
-    const submitHandler = async (event) => {
-      event.preventDefault();
-      setLoading(true);
+    try {
+      const res = await fetch(`${BASE_URL}/users/${user._id}`, {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+      console.log(res);
+      const { message } = await res.json();
 
-      try {
-        const res = await fetch(`${BASE_URL}/users/${user._id}`, {
-          method: "put",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(formData),
-        });
-        console.log(res);
-        const { message } = await res.json();
+      if (!res.ok) {
+        console.log("wrong");
+        throw new Error(message);
+      }
 
-        if (!res.ok) {
-          console.log("wrong");
-          throw new Error(message);
-        }
+      setLoading(false);
+      toast.success(message);
+      navigate("/users/profile/me");
 
-        setLoading(false);
-        toast.success(message);
-        navigate("/users/profile/me");
-
-        //  TransformStream.success()
-      } catch (error) {
-        toast.error(error.message);
-        setLoading(false);
-      
-    };
+      //  TransformStream.success()
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
   };
 
   return (
@@ -102,8 +98,8 @@ const ProfileSettings = ({user}) => {
             value={formData.email}
             onChange={handleInputChange}
             className="w-full pr-4  py-3 border-b border-solid border-[#0066ff61] focus:outline-none  focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor rounded-md cursor-pointer"
-           aria-readonly
-           readOnly
+            aria-readonly
+            readOnly
           />
         </div>
 
@@ -115,7 +111,6 @@ const ProfileSettings = ({user}) => {
             value={formData.password}
             onChange={handleInputChange}
             className="w-full pr-4  py-3 border-b border-solid border-[#0066ff61] focus:outline-none  focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor rounded-md cursor-pointer"
-           
           />
         </div>
 
@@ -132,8 +127,6 @@ const ProfileSettings = ({user}) => {
         </div>
 
         <div className="mb-5 flex items-center justify-between">
-         
-
           <label className="text-headingColor font-bold text-[16px] leading-7">
             Gender:
             <select
@@ -153,7 +146,11 @@ const ProfileSettings = ({user}) => {
         <div className="mb-5 flex items-center gap-3">
           {formData.photo && (
             <figure className="w-[60px] rounded-full border-2 border-solid border-primaryColor flex items-center justify-center">
-              <img src={formData.photo} alt="" className="w-full rounded-full" />
+              <img
+                src={formData.photo}
+                alt=""
+                className="w-full rounded-full"
+              />
             </figure>
           )}
           <div className="relative w-[130px] h-[50px]">

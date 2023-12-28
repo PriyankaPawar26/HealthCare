@@ -19,6 +19,11 @@ const Signup = () => {
     photo: selectedFile,
     gender : "",
     role : 'patient',
+     // additional fields for doctor
+     specialization: "",
+     experience: "",
+     totalPatients:"",  
+     hospital:"",
   });
 
   const navigate = useNavigate();
@@ -26,15 +31,7 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData(prevState => {
-  //     const updatedState = { ...prevState, [name]: value };
-  //     // console.log(updatedState); // Check the updated state in the console
-  //     return updatedState;
-  //   });
-  // };
-
+ 
     const handleFileInputChange = async (event)=>{
       const file = event.target.files[0]
       const data = await uploadImageToCloudinary(file)
@@ -78,6 +75,61 @@ const Signup = () => {
         setLoading(false)
       }
     }
+
+    const toggleDoctorFields = (role) => {
+      if (role === "doctor") {
+        return (
+          <>
+            <div className="mb-5">
+              <input
+                type="text"
+                placeholder="Specialization"
+                name="specialization"
+                value={formData.specialization}
+                onChange={handleInputChange}
+                className="w-full pr-4  py-3 border-b border-solid border-[#0066ff61] focus:outline-none  focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor rounded-md cursor-pointer"
+                required
+              />
+            </div>
+            <div className="mb-5">
+              <input
+                type="text"
+                placeholder="Experience"
+                name="experience"
+                value={formData.experience}
+                onChange={handleInputChange}
+                className="w-full pr-4  py-3 border-b border-solid border-[#0066ff61] focus:outline-none  focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor rounded-md cursor-pointer"
+                required
+              />
+            </div>
+            
+            <div className="mb-5">
+              <input
+                type="text"
+                placeholder="Hospital"
+                name="hospital"
+                value={formData.hospital}
+                onChange={handleInputChange}
+                className="w-full pr-4  py-3 border-b border-solid border-[#0066ff61] focus:outline-none  focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor rounded-md cursor-pointer"
+                required
+              />
+            </div>
+            <div className="mb-5">
+              <input
+                type="text"
+                placeholder="TotalPatients"
+                name="totalPatients"
+                value={formData.totalPatients}
+                onChange={handleInputChange}
+                className="w-full pr-4  py-3 border-b border-solid border-[#0066ff61] focus:outline-none  focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor rounded-md cursor-pointer"
+                required
+              />
+            </div>
+          </>
+        );
+      }
+      return null;
+    };
 
   return (
     <section className="px-5 xl:px-0">
@@ -145,7 +197,7 @@ const Signup = () => {
                     <option value="doctor">Doctor</option>
                   </select>
                 </label>
-
+                {toggleDoctorFields(formData.role)}
                 <label className="text-headingColor font-bold text-[16px] leading-7">
                   Gender:
                   <select

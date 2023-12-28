@@ -40,6 +40,8 @@ const RegisterAndLoginRoute = require("./Routers/registerAndlogin");
 const userRouter = require("./Routers/user");
 const doctorRouter = require("./Routers/doctor");
 const reviewRoute = require("./Routers/review");
+const nodemailer = require('nodemailer');
+const contactRouter = require("./Routers/contact")
 dotenv.config();
 
 const app = express();
@@ -64,6 +66,7 @@ app.use('/api/v1/auth', RegisterAndLoginRoute);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/doctors', doctorRouter);
 app.use("/api/v1/reviews", reviewRoute);
+app.use("/contact", contactRouter)
 
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);

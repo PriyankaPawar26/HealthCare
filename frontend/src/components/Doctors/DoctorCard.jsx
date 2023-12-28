@@ -1,19 +1,31 @@
-import React from "react";
+
+
+import React, { useState, useEffect } from "react";
 import starIcon from "../../assets/images/Star.png";
 import { Link } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
+import { BASE_URL } from "../../config";
+
 const DoctorCard = ({ doctor }) => {
+ 
+  
+  // if (!doctorData) {
+  //   return <div>Loading...</div>; // Or a loading spinner or message
+  // }
+
   const {
     name,
     avgRating,
     totalRating,
     photo,
     specialization,
-    totalPatients,
+    totalPatients,  
     hospital,
   } = doctor;
+  // console.log(doctorData)
   return (
     <div className="p-3 lg:p-5">
+      {/* Rest of your code using doctorData */}
       <div>
         <img src={photo} alt="" className="w-full" />
       </div>
@@ -48,7 +60,7 @@ const DoctorCard = ({ doctor }) => {
         </div>
 
         <Link
-          to="/doctors"
+           to={`/doctors/${doctor._id}`}
           className="w-[44px] h-[44px] rounded-full border border-solid border-[#181A1E] mt-[30px] mx-auto flex items-center justify-center group hover:bg-primaryColor hover:border-none"
         >
           <BsArrowRight className="group-hover:text-white w-6 h-5" />
@@ -59,3 +71,6 @@ const DoctorCard = ({ doctor }) => {
 };
 
 export default DoctorCard;
+
+
+
